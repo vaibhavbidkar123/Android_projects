@@ -17,12 +17,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
 
     private List<Players> playersList;
 
-   // public ItemClickListener clickListener;
+    public ItemClickListener clickListener;
 
 
-//    public void setClickListener(ItemClickListener myListener){
-//        this.clickListener = myListener;
-//    }
+    public void setClickListener(ItemClickListener myListener){
+        this.clickListener = myListener;
+    }
 
     public MyAdapter(List<Players> playersList) {
         this.playersList = playersList;
@@ -61,7 +61,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
 
 
     public class MyViewHolder extends
-            RecyclerView.ViewHolder   {
+            RecyclerView.ViewHolder  implements View.OnClickListener {
         // Holds references to the views within the item layout
 
         ImageView imageView;
@@ -74,7 +74,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
             title = itemView.findViewById(R.id.playerName);
             role = itemView.findViewById(R.id.role);
 
-//            itemView.setOnClickListener(this);
+            itemView.setOnClickListener(this);
 
 
 
@@ -82,12 +82,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
 
         }
 
-//        @Override
-//        public void onClick(View v) {
-//            if (clickListener != null){
-//                clickListener.onCLick(v,getAdapterPosition());
-//            }
-//        }
+        @Override
+        public void onClick(View v) {
+            if (clickListener != null){
+                clickListener.onCLick(v,getAdapterPosition());
+            }
+        }
     }
 }
 

@@ -11,7 +11,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ItemClickListener{
 
     RecyclerView recyclerView;
 
@@ -53,16 +53,18 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        myAdapter = new MyAdapter(playerslist);
-        recyclerView.setAdapter(myAdapter);
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
 
+        myAdapter = new MyAdapter(playerslist);
+        recyclerView.setAdapter(myAdapter);
 
 
-//        myAdapter.setClickListener(this);
+        myAdapter.setClickListener(this);
+
+
+
 
 
 
@@ -72,4 +74,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    @Override
+    public void onCLick(View v, int pos) {
+        Toast.makeText(this,
+                "Player Name : "+ playerslist.get(pos).getPlayerName(),
+                Toast.LENGTH_SHORT).show();
+
+    }
+
 }
