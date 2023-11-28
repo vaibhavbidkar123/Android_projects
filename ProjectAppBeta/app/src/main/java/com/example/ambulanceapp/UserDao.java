@@ -1,6 +1,7 @@
 package com.example.ambulanceapp;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -15,6 +16,9 @@ public interface UserDao {
 
     @Insert
     void insert(Users user);
+
+    @Delete
+    void delete(Users user);
 
     @Query("SELECT * FROM users")
     List<Users> getAllUsers();

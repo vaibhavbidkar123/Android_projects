@@ -41,8 +41,8 @@ public class Login extends AppCompatActivity {
 
     @SuppressLint("StaticFieldLeak")
     private void login() {
-        String name = editTextName.getText().toString();
-        String password = editTextPassword.getText().toString();
+        String name = editTextName.getText().toString().trim();
+        String password = editTextPassword.getText().toString().trim();
 
         // Use AsyncTask to perform database operation in the background
         new AsyncTask<Void, Void, Users>() {
@@ -57,7 +57,7 @@ public class Login extends AppCompatActivity {
                 super.onPostExecute(user);
 
                 // Check if login was successful
-                if(name.equals("user") && password.equals("1234")){
+                if((name.equals("admin")|| name.equals("Admin")) && password.equals("1234")){
 
                     // Navigate to the next activity (assuming NextActivity.class is the name of your next activity)
                     Intent intent = new Intent(Login.this, MainActivity2.class);

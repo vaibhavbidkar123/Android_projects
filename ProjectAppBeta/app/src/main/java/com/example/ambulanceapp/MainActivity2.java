@@ -30,8 +30,31 @@ public class MainActivity2 extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(userAdapter);
 
+        // Set the delete click listener
+        userAdapter.setOnDeleteClickListener(position -> deleteUser(position));
+
         // Load users from the database and update the RecyclerView
         loadUsers();
+    }
+
+    private void deleteUser(int position) {
+        Users userToDelete = userAdapter.getUsers().get(position);
+
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                userRepository.deleteUser(userToDelete);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+
+                // Refresh the RecyclerView after deletion
+                loadUsers();
+            }
+        }.execute();
     }
 
     private void loadUsers() {

@@ -15,6 +15,9 @@ public class UserRepository {
         return userDao.login(name, password);
     }
 
+    public void deleteUser(Users user) {
+        userDao.delete(user);
+    }
     public void register(Users user) {
         userDao.insert(user);
     }

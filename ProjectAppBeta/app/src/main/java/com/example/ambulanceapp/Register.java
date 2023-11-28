@@ -35,8 +35,8 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Retrieve user input
-                String name = editTextName.getText().toString();
-                String password = editTextPassword.getText().toString();
+                String name = editTextName.getText().toString().trim();
+                String password = editTextPassword.getText().toString().trim();
 
                 // Create a new user
                 Users user = new Users();
