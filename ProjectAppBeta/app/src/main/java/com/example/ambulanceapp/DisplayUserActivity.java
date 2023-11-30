@@ -10,7 +10,7 @@ import android.os.Bundle;
 import java.util.List;
 
 // DisplayUsersActivity.java
-public class MainActivity2 extends AppCompatActivity {
+public class DisplayUserActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private UserAdapter userAdapter;

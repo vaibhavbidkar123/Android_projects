@@ -12,11 +12,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 // LoginActivity.java
-public class Login extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private EditText editTextName;
     private EditText editTextPassword;
-
     private UserRepository userRepository;
 
     @Override
@@ -60,16 +59,19 @@ public class Login extends AppCompatActivity {
                 if((name.equals("admin")|| name.equals("Admin")) && password.equals("1234")){
 
                     // Navigate to the next activity (assuming NextActivity.class is the name of your next activity)
-                    Intent intent = new Intent(Login.this, MainActivity2.class);
+                    Intent intent = new Intent(LoginActivity.this, DisplayUserActivity.class);
                     startActivity(intent);
                 }else if (user != null) {
                     // Login successful
-                    Toast.makeText(Login.this, "Login successful", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(LoginActivity.this, SetPathActivity.class);
+                    startActivity(intent);
+
 
                     // You can add code here to navigate to the main activity or perform other actions
                 } else {
                     // Login failed
-                    Toast.makeText(Login.this, "Login failed. Please retry.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Login failed. Please retry.", Toast.LENGTH_SHORT).show();
                 }
             }
         }.execute();

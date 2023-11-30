@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.ambulanceapp"
+    namespace = "com.example.myapplication"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.ambulanceapp"
+        applicationId = "com.example.myapplication"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
@@ -26,6 +26,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    packagingOptions{
+        resources.excludes.add("META-INF/*")
+    }
 }
 
 dependencies {
@@ -36,13 +39,9 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    implementation ("androidx.room:room-runtime:2.4.0")
-    annotationProcessor ("androidx.room:room-compiler:2.4.0")
-    implementation ("androidx.room:room-ktx:2.4.0")
-    implementation ("com.google.android.gms:play-services-maps:17.0.1")
-    implementation ("com.google.android.gms:play-services-location:18.0.0")
-    implementation ("com.google.android.libraries.places:places:3.3.0") // Check for the latest version
-    implementation ("com.google.maps:google-maps-services:0.18.0")
-    implementation ("com.google.maps.android:android-maps-utils:2.2.0")
+    implementation ("org.osmdroid:osmdroid-android:6.1.17")
+    //implementation ("com.graphhopper:directions-api-client-android:0.13.0")
+    implementation ("com.esri.arcgisruntime:arcgis-android:100.13.0")
+
 
 }
