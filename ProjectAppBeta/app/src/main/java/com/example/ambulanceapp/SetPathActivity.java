@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -62,6 +63,7 @@ public class SetPathActivity extends AppCompatActivity {
                 .appendPath("json")
                 .appendQueryParameter("origin", source.getText().toString())
                 .appendQueryParameter("destination", destination.getText().toString());
+        //https://maps.googleapis.com/maps/api/directions/json
 
         // Adding waypoints
         if (waypoints != null && waypoints.size() > 0) {
@@ -169,7 +171,13 @@ public class SetPathActivity extends AppCompatActivity {
                 LatLng latLng = startLocationsList.get(i);
                 Log.d("StartLocation", "Step " + i + ": " + latLng.latitude + ", " + latLng.longitude);
             }
-
+            if(startLocationsList.contains(new LatLng(15.3757246, 73.9258352))){
+                Toast.makeText(SetPathActivity.this, "Divider detected ", Toast.LENGTH_SHORT).show();
+                Log.d("divider","divider detected");
+            }else {
+                Toast.makeText(SetPathActivity.this, "NO Divider detected ", Toast.LENGTH_SHORT).show();
+                Log.d("divider","No divider detected");
+            }
             Intent intent = new Intent(SetPathActivity.this, ShowRoute.class);
             intent.putParcelableArrayListExtra("myObjectList", new ArrayList<>(startLocationsList));
             startActivity(intent);

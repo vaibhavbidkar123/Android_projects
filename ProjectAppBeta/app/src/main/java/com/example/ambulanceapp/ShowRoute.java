@@ -1,6 +1,7 @@
 package com.example.ambulanceapp;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
@@ -34,17 +36,26 @@ public class ShowRoute extends AppCompatActivity implements OnMapReadyCallback {
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
-
-        // Set up your list of coordinates
-
-        // Add more coordinates as needed
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         // Plot the polyline on the map
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates.get(0), 10f));
-        googleMap.addPolyline(new PolylineOptions().addAll(coordinates));
+        googleMap.addPolyline(new PolylineOptions().addAll(coordinates).color(Color.BLUE));
+
+        // Add markers for source (first coordinate) and destination (last coordinate)
+        addMarker(googleMap, "Source", coordinates.get(0));
+        addMarker(googleMap, "Destination", coordinates.get(coordinates.size() - 1));
+        addMarker(googleMap, "Divider", new LatLng(15.3757246, 73.9258352));
+
+
+
+    }
+
+    // Method to add a marker
+    private void addMarker(GoogleMap googleMap, String title, LatLng position) {
+        googleMap.addMarker(new MarkerOptions().position(position).title(title));
     }
 
     // Other lifecycle methods for the MapView

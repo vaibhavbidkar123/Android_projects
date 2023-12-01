@@ -1,13 +1,8 @@
 package com.example.myapplication;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,166 +12,100 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btnGetDirections;
-    private TextView tvDirectionsResult;
+    private static final String GOOGLE_MAPS_API_KEY = "AIzaSyDhw_dv7xSxPQWCQtzg6SnfuIEHpHBB_vc";
+    private static final String DIRECTIONS_ENDPOINT = "https://maps.googleapis.com/maps/api/directions/json";
+
+    private List<LatLng> coordinates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btnGetDirections = findViewById(R.id.btnGetDirections);
-        tvDirectionsResult = findViewById(R.id.tvDirectionsResult);
+        coordinates = new ArrayList<>();
 
-        btnGetDirections.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new GetDirectionsTask().execute();
-            }
-        });
+        // Example usage
+        new GetDirectionsTask().execute("margao ,goa ,india", "panjim goa india ");
     }
 
-    private String buildDirectionsUrl(double startLatitude, double startLongitude,
-                                      double endLatitude, double endLongitude,
-                                      List<LatLng> waypoints) {
-        Uri.Builder builder = new Uri.Builder();
-        builder.scheme("https")
-                .authority("maps.googleapis.com")
-                .appendPath("maps")
-                .appendPath("api")
-                .appendPath("directions")
-                .appendPath("json")
-                .appendQueryParameter("origin", "Goa")
-                .appendQueryParameter("destination", "mumbai");
-
-        // Adding waypoints
-        if (waypoints != null && waypoints.size() > 0) {
-            StringBuilder waypointsBuilder = new StringBuilder();
-            for (LatLng waypoint : waypoints) {
-                waypointsBuilder.append(waypoint.latitude)
-                        .append(",")
-                        .append(waypoint.longitude)
-                        .append("|");
-            }
-            waypointsBuilder.setLength(waypointsBuilder.length() - 1); // Remove the last '|'
-            builder.appendQueryParameter("waypoints", waypointsBuilder.toString());
-        }
-
-        builder.appendQueryParameter("mode", "driving")
-                .appendQueryParameter("key", "AIzaSyDhw_dv7xSxPQWCQtzg6SnfuIEHpHBB_vc"); // Replace with your actual API key
-
-        return builder.build().toString();
-    }
-
-
-    private class GetDirectionsTask extends AsyncTask<Void, Void, List<LatLng>> {
+    private class GetDirectionsTask extends AsyncTask<String, Void, String> {
 
         @Override
-        protected List<LatLng> doInBackground(Void... voids) {
-            List<LatLng> startLocationsList = new ArrayList<>();
-
+        protected String doInBackground(String... locations) {
             try {
-                // Replace these coordinates with your actual start and end coordinates
-                double startLatitude = 15.4643;
-                double startLongitude = 73.8584;
-                double endLatitude = 15.2950;
-                double endLongitude =  73.9536;
-
-                // Replace this with your actual waypoints if needed
-                List<LatLng> waypoints = null;
-
-                String directionsUrl = buildDirectionsUrl(
-                        startLatitude, startLongitude, endLatitude, endLongitude, waypoints);
+                // Construct the API URL
+                String apiUrl = DIRECTIONS_ENDPOINT +
+                        "?key=" + GOOGLE_MAPS_API_KEY +
+                        "&origin=" + locations[0] +
+                        "&destination=" + locations[1] +
+                        "&mode=driving"; // You can specify the travel mode here
 
                 // Make the HTTP request
-                URL url = new URL(directionsUrl);
+                URL url = new URL(apiUrl);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+
                 try {
-                    InputStream in = urlConnection.getInputStream();
-                    Scanner scanner = new Scanner(in);
-                    scanner.useDelimiter("\\A");
-                    String result = scanner.hasNext() ? scanner.next() : null;
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                    StringBuilder stringBuilder = new StringBuilder();
 
-                    if (result != null) {
-                        try {
-                            JSONObject jsonResponse = new JSONObject(result);
-
-                            // Check if the "routes" array exists
-                            if (jsonResponse.has("routes")) {
-                                JSONArray routesArray = jsonResponse.getJSONArray("routes");
-
-                                // Loop through each route
-                                for (int i = 0; i < routesArray.length(); i++) {
-                                    JSONObject route = routesArray.getJSONObject(i);
-
-                                    // Check if the "legs" array exists
-                                    if (route.has("legs")) {
-                                        JSONArray legsArray = route.getJSONArray("legs");
-
-                                        // Loop through each leg
-                                        for (int j = 0; j < legsArray.length(); j++) {
-                                            JSONObject leg = legsArray.getJSONObject(j);
-
-                                            // Check if the "steps" array exists
-                                            if (leg.has("steps")) {
-                                                JSONArray stepsArray = leg.getJSONArray("steps");
-
-                                                // Loop through each step
-                                                for (int k = 0; k < stepsArray.length(); k++) {
-                                                    JSONObject step = stepsArray.getJSONObject(k);
-
-                                                    // Extract start location latitude and longitude
-                                                    JSONObject startLocation = step.getJSONObject("start_location");
-                                                    double startLat = startLocation.getDouble("lat");
-                                                    double startLng = startLocation.getDouble("lng");
-
-                                                    // Add the LatLng to the list
-                                                    startLocationsList.add(new LatLng(startLat, startLng));
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        stringBuilder.append(line).append("\n");
                     }
+
+                    return stringBuilder.toString();
                 } finally {
                     urlConnection.disconnect();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                return null;
             }
-
-            return startLocationsList;
         }
 
         @Override
-        protected void onPostExecute(List<LatLng> startLocationsList) {
-            // Log the list of start locations
-            for (int i = 0; i < startLocationsList.size(); i++) {
-                LatLng latLng = startLocationsList.get(i);
-                Log.d("StartLocation", "Step " + i + ": " + latLng.latitude + ", " + latLng.longitude);
+        protected void onPostExecute(String result) {
+            if (result != null) {
+                try {
+                    // Parse the JSON response
+                    JSONObject jsonResponse = new JSONObject(result);
+                    JSONArray steps = jsonResponse.getJSONArray("routes")
+                            .getJSONObject(0)
+                            .getJSONArray("legs")
+                            .getJSONObject(0)
+                            .getJSONArray("steps");
+
+                    // Log the step-by-step coordinates
+                    for (int i = 0; i < steps.length(); i++) {
+                        JSONObject step = steps.getJSONObject(i);
+                        JSONObject startLocation = step.getJSONObject("start_location");
+
+                        double lat = startLocation.getDouble("lat");
+                        double lng = startLocation.getDouble("lng");
+
+                        LatLng latLng = new LatLng(lat, lng);
+                        coordinates.add(latLng);
+
+                        Log.d("Directions", "Step " + (i + 1) + ": Lat=" + lat + ", Lng=" + lng);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Log.e("Directions", "Failed to get directions");
             }
-
-            Intent intent = new Intent(MainActivity.this, MainActivity2.class);
-            intent.putParcelableArrayListExtra("myObjectList", new ArrayList<>(startLocationsList));
-            startActivity(intent);
-
         }
     }
-
-
 }
+
 
