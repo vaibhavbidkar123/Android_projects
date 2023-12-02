@@ -3,6 +3,7 @@ package com.example.ambulanceapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -27,6 +28,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         editTextName = findViewById(R.id.NameEditText);
         editTextPassword = findViewById(R.id.PasswordEditText);
+        editTextPassword.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
         Button registerButton = findViewById(R.id.LoginButton);
         registerButton.setOnClickListener(new View.OnClickListener() {
@@ -36,6 +38,12 @@ public class RegisterActivity extends AppCompatActivity {
                 // Retrieve user input
                 String name = editTextName.getText().toString().trim();
                 String password = editTextPassword.getText().toString().trim();
+
+                // Check if name and password are not empty
+                if (name.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(RegisterActivity.this, "Name and password cannot be empty", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 // Create a new user
                 Users user = new Users();
@@ -57,8 +65,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                         // Show a success message
                         Toast.makeText(RegisterActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
-
-
+                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                        startActivity(intent);
                     }
                 }.execute();
             }

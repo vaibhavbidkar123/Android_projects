@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-// LoginActivity.java
+
 public class LoginActivity extends AppCompatActivity {
 
     private EditText editTextName;
@@ -25,6 +25,7 @@ public class LoginActivity extends AppCompatActivity {
 
         editTextName = findViewById(R.id.NameEditText);
         editTextPassword = findViewById(R.id.PasswordEditText);
+        editTextPassword.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
         userRepository = new UserRepository(userDatabase.getInstance(getApplicationContext()).userDao());
 
@@ -59,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
                 if((name.equals("admin")|| name.equals("Admin")) && password.equals("1234")){
 
                     // Navigate to the next activity (assuming NextActivity.class is the name of your next activity)
-                    Intent intent = new Intent(LoginActivity.this, DisplayUserActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, DisplayUsersActivity.class);
                     startActivity(intent);
                 }else if (user != null) {
                     // Login successful

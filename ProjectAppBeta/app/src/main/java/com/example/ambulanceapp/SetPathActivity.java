@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -43,6 +44,21 @@ public class SetPathActivity extends AppCompatActivity {
         path.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Validate user inputs before proceeding
+                String sourceText = source.getText().toString().trim();
+                String destinationText = destination.getText().toString().trim();
+
+                if (TextUtils.isEmpty(sourceText)) {
+                    source.setError("Source cannot be empty");
+                    return;
+                }
+
+                if (TextUtils.isEmpty(destinationText)) {
+                    destination.setError("Destination cannot be empty");
+                    return;
+                }
+
+                // Both source and destination are not empty, proceed with GetDirectionsTask
                 new GetDirectionsTask().execute();
             }
         });

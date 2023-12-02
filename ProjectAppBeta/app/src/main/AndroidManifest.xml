@@ -31,7 +31,7 @@
             android:name=".SetPathActivity"
             android:exported="false" />
         <activity
-            android:name=".DisplayUserActivity"
+            android:name=".DisplayUsersActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
