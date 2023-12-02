@@ -11,6 +11,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -47,8 +49,9 @@ public class ShowRoute extends AppCompatActivity implements OnMapReadyCallback {
         // Add markers for source (first coordinate) and destination (last coordinate)
         addMarker(googleMap, "Source", coordinates.get(0));
         addMarker(googleMap, "Destination", coordinates.get(coordinates.size() - 1));
-        addMarker(googleMap, "Divider", new LatLng(15.3757246, 73.9258352));
-
+        addDividerMarker(googleMap, "Divider 1", new LatLng(15.3757246, 73.9258352));
+        addDividerMarker(googleMap, "Divider 2", new LatLng(15.3733589, 74.0106969));
+        addDividerMarker(googleMap, "Divider 3", new LatLng(15.2982048, 73.97173699999999));
 
 
     }
@@ -56,6 +59,11 @@ public class ShowRoute extends AppCompatActivity implements OnMapReadyCallback {
     // Method to add a marker
     private void addMarker(GoogleMap googleMap, String title, LatLng position) {
         googleMap.addMarker(new MarkerOptions().position(position).title(title));
+
+    }
+    private  void addDividerMarker(GoogleMap googleMap, String title, LatLng position){
+        googleMap.addMarker(new MarkerOptions().position(position).title(title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+
     }
 
     // Other lifecycle methods for the MapView

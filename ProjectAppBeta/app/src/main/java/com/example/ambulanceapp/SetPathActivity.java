@@ -171,7 +171,7 @@ public class SetPathActivity extends AppCompatActivity {
                 LatLng latLng = startLocationsList.get(i);
                 Log.d("StartLocation", "Step " + i + ": " + latLng.latitude + ", " + latLng.longitude);
             }
-            if(startLocationsList.contains(new LatLng(15.3757246, 73.9258352))){
+            if(startLocationsList.contains(new LatLng(15.3757246, 73.9258352)) ||startLocationsList.contains(new LatLng(15.3733589, 74.0106969))  ||startLocationsList.contains(new LatLng(15.2982048, 73.97173699999999)) ){
                 Toast.makeText(SetPathActivity.this, "Divider detected ", Toast.LENGTH_SHORT).show();
                 Log.d("divider","divider detected");
             }else {
