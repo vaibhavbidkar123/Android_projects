@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".SetPathActivity">
 
-    <EditText
+    <TextView
         android:id="@+id/Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,9 +15,9 @@
         android:textAlignment="center"
         android:textSize="40dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></EditText>
+        app:layout_constraintTop_toTopOf="parent"></TextView>
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/Source"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,9 +25,9 @@
         android:hint="Source"
         android:textAlignment="center"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Title"></EditText>
+        app:layout_constraintTop_toBottomOf="@+id/Title"></AutoCompleteTextView>
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/Destination"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
         android:hint="Source"
         android:textAlignment="center"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Source"></EditText>
+        app:layout_constraintTop_toBottomOf="@+id/Source"></AutoCompleteTextView>
 
     <Button
         android:id="@+id/PathButton"

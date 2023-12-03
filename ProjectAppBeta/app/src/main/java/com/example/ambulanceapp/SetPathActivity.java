@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -29,16 +31,24 @@ import java.util.Scanner;
 
 public class SetPathActivity extends AppCompatActivity {
 
-    private EditText source,destination;
+    private AutoCompleteTextView source,destination;
     private Button path;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_path);
-
-        source=findViewById(R.id.Source);
-        destination=findViewById(R.id.Destination);
+        String[] languages={"Panjim ","Margao","Canacona","Navelim","Ponda","Mapusa","quepem ","Valpoi","Bambolim","Pednem","Savordem","porvorim"};
+        source=(AutoCompleteTextView) findViewById(R.id.Source);
+        destination=(AutoCompleteTextView) findViewById(R.id.Destination);
         path=findViewById((R.id.PathButton));
+        ArrayAdapter adapter = new
+                ArrayAdapter(this,android.R.layout.simple_list_item_1,languages);
+
+        source.setAdapter(adapter);
+        source.setThreshold(1);
+
+        destination.setAdapter(adapter);
+        destination.setThreshold(1);
 
 
         path.setOnClickListener(new View.OnClickListener() {
