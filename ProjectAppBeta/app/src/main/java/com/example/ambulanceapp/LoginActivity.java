@@ -2,7 +2,6 @@ package com.example.ambulanceapp;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +10,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -29,8 +30,7 @@ public class LoginActivity extends AppCompatActivity {
 
         userRepository = new UserRepository(userDatabase.getInstance(getApplicationContext()).userDao());
 
-        Button loginButton;
-        loginButton = findViewById(R.id.LoginButton);
+        Button loginButton = findViewById(R.id.LoginButton);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -44,37 +44,30 @@ public class LoginActivity extends AppCompatActivity {
         String name = editTextName.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
 
-        // Use AsyncTask to perform database operation in the background
-        new AsyncTask<Void, Void, Users>() {
-            @Override
-            protected Users doInBackground(Void... voids) {
-                // Retrieve the user from the database based on the entered credentials
-                return userRepository.login(name, password);
-            }
+        // Use Executor to perform database operation in the background
+        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            // Retrieve the user from the database based on the entered credentials
+            Users user = userRepository.login(name, password);
 
-            @Override
-            protected void onPostExecute(Users user) {
-                super.onPostExecute(user);
-
+            // Update UI on the main thread
+            runOnUiThread(() -> {
                 // Check if login was successful
-                if((name.equals("admin")|| name.equals("Admin")) && password.equals("1234")){
-
-                    // Navigate to the next activity (assuming NextActivity.class is the name of your next activity)
+                if ((name.equals("admin") || name.equals("Admin")) && password.equals("1234")) {
+                    // Navigate to the next activity (assuming DisplayUsersActivity.class is the name of your next activity)
                     Intent intent = new Intent(LoginActivity.this, DisplayUsersActivity.class);
                     startActivity(intent);
-                }else if (user != null) {
+                } else if (user != null) {
                     // Login successful
                     Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(LoginActivity.this, SetPathActivity.class);
                     startActivity(intent);
-
-
                     // You can add code here to navigate to the main activity or perform other actions
                 } else {
                     // Login failed
                     Toast.makeText(LoginActivity.this, "Login failed. Please retry.", Toast.LENGTH_SHORT).show();
                 }
-            }
-        }.execute();
+            });
+        });
     }
 }
